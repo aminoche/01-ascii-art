@@ -4,6 +4,7 @@
   "description": "",
   "main": "ascii-art.js",
   "scripts": {
+    "start": "nodemon ascii-art.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,6 +12,6 @@
   "dependencies": {
     "caman": "^4.1.2",
     "colors": "^1.4.0",
-    "nodemon": "^2.0.3"
+    "fibers": "^4.0.2"
   }
 }
