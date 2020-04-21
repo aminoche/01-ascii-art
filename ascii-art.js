@@ -3,10 +3,10 @@ var colors = require('colors/safe');
 
 //Note: With error "TypeError: Canvas is not a constructor", update node_modules/caman/dist/caman.full.js on line 371 to this.canvas = new Canvas.Canvas(this.imageWidth(), this.imageHeight()); AND on line 2530, update canvas = new Canvas.Canvas(newDims.width, newDims.height);
 
-const picture = Caman('img/ascii-pineapple.jpg', function () {
-  const factor = 3;
+const picture = Caman('img/snapshot.jpg', function () {
+  const factor = 4;
   this.resize({
-    width: this.width / factor,
+    width: 237,
     height: this.height / factor,
   });
   this.render();
@@ -41,7 +41,7 @@ const picture = Caman('img/ascii-pineapple.jpg', function () {
   }
   const final = twoDimensions
     .map((element) =>
-      element.map((rgba) => [brightness[rgba.luminosity]].join('')).join('')
+      element.map((rgba) => [brightness[rgba.lightness]].join('')).join('')
     )
     .join(colors.bgRed('|\n'));
 
