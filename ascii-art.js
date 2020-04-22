@@ -6,7 +6,7 @@ const { exec } = require('child_process');
 
 //requires imagesnap:
 //to fix, run brew install imagesnap
-exec('imagesnap img/self.jpg', (error, stdout, stderr) => {
+exec('imagesnap img/selfie.jpg', (error, stdout, stderr) => {
   if (error) {
     console.log(`error: ${error.message}`);
     return;
@@ -18,7 +18,7 @@ exec('imagesnap img/self.jpg', (error, stdout, stderr) => {
   console.log(`stdout: ${stdout}`);
 });
 const TERMINAL_WIDTH = 237;
-const picture = Caman('img/ascii-pineapple.jpg', function () {
+const picture = Caman('img/selfie.jpg', function () {
   const factor = 4;
   this.resize({
     width: this.width / factor,
