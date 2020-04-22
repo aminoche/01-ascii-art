@@ -15,10 +15,11 @@ exec('imagesnap img/selfie.jpg -w 1', (error, stdout, stderr) => {
     console.log(`stderr: ${stderr}`);
     return;
   }
-  console.log(`stdout: ${stdout}`);
+  //console.log(`stdout: ${stdout}`);
 });
-const TERMINAL_WIDTH = 238; //run tput cols in the terminal
-const TERMINAL_HEIGHT = 63; //run tput lines in the terminal
+
+const TERMINAL_WIDTH = 212; //run tput cols in the terminal
+const TERMINAL_HEIGHT = 59; //run tput lines in the terminal
 const resizeFactor = 1;
 const picture = Caman('img/selfie.jpg', function () {
   //console.log('original dimensions: ', this.dimensions);

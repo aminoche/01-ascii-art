@@ -4,7 +4,7 @@
   "description": "",
   "main": "ascii-art.js",
   "scripts": {
-    "start": "nodemon ascii-art.js",
+    "start": "nodemon -q -e js,jpg",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
