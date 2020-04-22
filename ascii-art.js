@@ -6,7 +6,7 @@ const { exec } = require('child_process');
 
 //requires imagesnap:
 //to fix, run brew install imagesnap
-exec('imagesnap img/selfie.jpg', (error, stdout, stderr) => {
+exec('imagesnap img/selfie.jpg -w 2', (error, stdout, stderr) => {
   if (error) {
     console.log(`error: ${error.message}`);
     return;
@@ -17,15 +17,16 @@ exec('imagesnap img/selfie.jpg', (error, stdout, stderr) => {
   }
   console.log(`stdout: ${stdout}`);
 });
-const TERMINAL_WIDTH = 237;
+const TERMINAL_WIDTH = 238; //run tput cols in the terminal
+const resizeFactor = 2;
 const picture = Caman('img/selfie.jpg', function () {
-  const factor = 4;
+  console.log('original dimensions: ', this.dimensions);
   this.resize({
-    width: this.width / factor,
-    height: this.height / factor,
+    width: TERMINAL_WIDTH / resizeFactor,
+    height: (this.height * (TERMINAL_WIDTH / this.width)) / resizeFactor,
   });
   this.render();
-  console.log(this.dimensions);
+  console.log('updated dimensions', this.dimensions);
   const rgbaArray = [];
   const brightness =
     '`^",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$';
@@ -38,12 +39,18 @@ const picture = Caman('img/selfie.jpg', function () {
       blue = 255 - blue;
       alpha = 255 - alpha;
     }
-    const average = Math.round((((red + green + blue) / 3) * 65) / 255);
-    const lightness = Math.round(
-      (((Math.max(red, green, blue) + Math.min(red, green, blue)) / 2) * 65) /
+    const average = Math.floor(
+      (((red + green + blue) / 3) * brightness.length) / 255
+    );
+    if (average < 0 || average > 64) {
+      console.log(average);
+    }
+    const lightness = Math.floor(
+      (((Math.max(red, green, blue) + Math.min(red, green, blue)) / 2) *
+        brightness.length) /
         255
     );
-    const luminosity = Math.round(
+    const luminosity = Math.floor(
       (0.21 * red + 0.72 * green + 0.07 * blue) / 255
     );
     const dominantColor =
@@ -73,14 +80,16 @@ const picture = Caman('img/selfie.jpg', function () {
     .map((element) =>
       element
         .map((rgba) => {
-          return [colors[rgba.dominantColor](brightness[rgba.average])].join(
-            ''
-          );
+          return [
+            //length of this array should be the resize factor
+            //colors[rgba.dominantColor](brightness[rgba.luminosity]),
+            colors[rgba.dominantColor](brightness[rgba.lightness]),
+            colors[rgba.dominantColor](brightness[rgba.average]),
+          ].join('');
         })
         .join('')
         .padEnd(TERMINAL_WIDTH, '-')
     )
-    .join(colors.bgWhite.black('|\n'));
-
+    .join('\n');
   console.log(final);
 });
