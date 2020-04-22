@@ -46,7 +46,14 @@ const picture = Caman('img/selfie.jpg', function () {
     const luminosity = Math.round(
       (0.21 * red + 0.72 * green + 0.07 * blue) / 255
     );
+    const dominantColor =
+      Math.max(red, green, blue) === red
+        ? 'red'
+        : Math.max(red, green, blue) === green
+        ? 'green'
+        : 'blue';
     rgbaArray.push({
+      dominantColor,
       average,
       lightness,
       luminosity,
@@ -65,11 +72,15 @@ const picture = Caman('img/selfie.jpg', function () {
   const final = twoDimensions
     .map((element) =>
       element
-        .map((rgba) => [brightness[rgba.luminosity]].join(''))
+        .map((rgba) => {
+          return [colors[rgba.dominantColor](brightness[rgba.average])].join(
+            ''
+          );
+        })
         .join('')
-        .padEnd(TERMINAL_WIDTH, '.')
+        .padEnd(TERMINAL_WIDTH, '-')
     )
-    .join(colors.bgBlue.red('|\n'));
+    .join(colors.bgWhite.black('|\n'));
 
-  console.log(colors.yellow.bold(final));
+  console.log(final);
 });
