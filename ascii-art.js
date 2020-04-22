@@ -5,8 +5,8 @@ const colors = require('colors/safe');
 const { exec } = require('child_process');
 
 //requires imagesnap:
-//to fix, run brew install imagesnap
-exec('imagesnap img/selfie.jpg -w 2', (error, stdout, stderr) => {
+//to install, run brew install imagesnap
+exec('imagesnap img/selfie.jpg -w 1', (error, stdout, stderr) => {
   if (error) {
     console.log(`error: ${error.message}`);
     return;
@@ -18,15 +18,16 @@ exec('imagesnap img/selfie.jpg -w 2', (error, stdout, stderr) => {
   console.log(`stdout: ${stdout}`);
 });
 const TERMINAL_WIDTH = 238; //run tput cols in the terminal
-const resizeFactor = 2;
+const TERMINAL_HEIGHT = 63; //run tput lines in the terminal
+const resizeFactor = 1;
 const picture = Caman('img/selfie.jpg', function () {
-  console.log('original dimensions: ', this.dimensions);
+  //console.log('original dimensions: ', this.dimensions);
   this.resize({
     width: TERMINAL_WIDTH / resizeFactor,
-    height: (this.height * (TERMINAL_WIDTH / this.width)) / resizeFactor,
+    height: TERMINAL_HEIGHT / resizeFactor, //(this.height * (TERMINAL_WIDTH / this.width)) / resizeFactor,
   });
   this.render();
-  console.log('updated dimensions', this.dimensions);
+  //console.log('updated dimensions', this.dimensions);
   const rgbaArray = [];
   const brightness =
     '`^",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$';
@@ -42,9 +43,7 @@ const picture = Caman('img/selfie.jpg', function () {
     const average = Math.floor(
       (((red + green + blue) / 3) * brightness.length) / 255
     );
-    if (average < 0 || average > 64) {
-      console.log(average);
-    }
+
     const lightness = Math.floor(
       (((Math.max(red, green, blue) + Math.min(red, green, blue)) / 2) *
         brightness.length) /
@@ -82,8 +81,8 @@ const picture = Caman('img/selfie.jpg', function () {
         .map((rgba) => {
           return [
             //length of this array should be the resize factor
-            //colors[rgba.dominantColor](brightness[rgba.luminosity]),
-            colors[rgba.dominantColor](brightness[rgba.lightness]),
+            //colors[rgba.dominantColor](brightness[rgba.lightness]),
+            //            colors[rgba.dominantColor](brightness[rgba.luminosity]),
             colors[rgba.dominantColor](brightness[rgba.average]),
           ].join('');
         })
