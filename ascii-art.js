@@ -1,12 +1,27 @@
 const Caman = require('caman').Caman;
-var colors = require('colors/safe');
-
 //Note: With error "TypeError: Canvas is not a constructor", update node_modules/caman/dist/caman.full.js on line 371 to this.canvas = new Canvas.Canvas(this.imageWidth(), this.imageHeight()); AND on line 2530, update canvas = new Canvas.Canvas(newDims.width, newDims.height);
 
-const picture = Caman('img/snapshot.jpg', function () {
+const colors = require('colors/safe');
+const { exec } = require('child_process');
+
+//requires imagesnap:
+//to fix, run brew install imagesnap
+exec('imagesnap img/self.jpg', (error, stdout, stderr) => {
+  if (error) {
+    console.log(`error: ${error.message}`);
+    return;
+  }
+  if (stderr) {
+    console.log(`stderr: ${stderr}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+});
+const TERMINAL_WIDTH = 237;
+const picture = Caman('img/ascii-pineapple.jpg', function () {
   const factor = 4;
   this.resize({
-    width: 237,
+    width: this.width / factor,
     height: this.height / factor,
   });
   this.render();
@@ -16,7 +31,7 @@ const picture = Caman('img/snapshot.jpg', function () {
     '`^",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$';
   for (let i = 0; i < this.pixelData.length; i += 4) {
     let [red, green, blue, alpha] = this.pixelData.slice(i, i + 4);
-    const inverse = true;
+    const inverse = false;
     if (inverse) {
       red = 255 - red;
       green = 255 - green;
@@ -31,7 +46,15 @@ const picture = Caman('img/snapshot.jpg', function () {
     const luminosity = Math.round(
       (0.21 * red + 0.72 * green + 0.07 * blue) / 255
     );
-    rgbaArray.push({ average, lightness, luminosity, red, green, blue, alpha });
+    rgbaArray.push({
+      average,
+      lightness,
+      luminosity,
+      red,
+      green,
+      blue,
+      alpha,
+    });
   }
 
   const twoDimensions = [];
@@ -41,9 +64,12 @@ const picture = Caman('img/snapshot.jpg', function () {
   }
   const final = twoDimensions
     .map((element) =>
-      element.map((rgba) => [brightness[rgba.lightness]].join('')).join('')
+      element
+        .map((rgba) => [brightness[rgba.luminosity]].join(''))
+        .join('')
+        .padEnd(TERMINAL_WIDTH, '.')
     )
-    .join(colors.bgRed('|\n'));
+    .join(colors.bgBlue.red('|\n'));
 
-  console.log(colors.green(final));
+  console.log(colors.yellow.bold(final));
 });
