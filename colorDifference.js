@@ -3,16 +3,33 @@
 
 const distinct = [
   { color: 'black', value: { red: 0, green: 0, blue: 0 } },
-  { color: 'red', value: { red: 255, green: 0, blue: 0 } },
   { color: 'green', value: { red: 0, green: 190, blue: 0 } },
-  { color: 'yellow', value: { red: 255, green: 235, blue: 0 } },
-  { color: 'blue', value: { red: 67, green: 133, blue: 255 } },
-  { color: 'magenta', value: { red: 255, green: 0, blue: 255 } },
-  { color: 'cyan', value: { red: 100, green: 255, blue: 255 } },
-  { color: 'white', value: { red: 255, green: 255, blue: 255 } },
-  { color: 'grey', value: { red: 128, green: 128, blue: 128 } },
+  { color: 'red', value: { red: 255, green: 0, blue: 0 } },
+  {
+    color: 'grey',
+    value: { red: 128, green: 128, blue: 128 },
+  },
+  {
+    color: 'blue',
+    value: { red: 67, green: 133, blue: 255 },
+  },
+  {
+    color: 'yellow',
+    value: { red: 255, green: 235, blue: 0 },
+  },
+  {
+    color: 'magenta',
+    value: { red: 255, green: 0, blue: 255 },
+  },
+  {
+    color: 'cyan',
+    value: { red: 100, green: 255, blue: 255 },
+  },
+  {
+    color: 'white',
+    value: { red: 255, green: 255, blue: 255 },
+  },
 ];
-
 const closestColor = (r, g, b) => {
   let colorReturn = 'NA';
   let maxRGB = 255;

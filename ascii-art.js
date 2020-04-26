@@ -40,9 +40,9 @@ if (AUTO_PHOTO) {
   );
 }
 
-const picture = Caman('img/ascii-pineapple.jpg', function () {
+const picture = Caman('img/mountain.jpg', function () {
   const SETTINGS = {
-    INVERT_COLORS: false,
+    INVERT_COLORS: true,
   };
   const TERMINAL_WIDTH = process.stdout.columns;
   const TERMINAL_HEIGHT = process.stdout.rows;
@@ -72,21 +72,19 @@ const picture = Caman('img/ascii-pineapple.jpg', function () {
     const BRIGHTNESS_MAP =
       ' `^",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$';
     const red = pixel.red;
-    const blue = pixel.blue;
     const green = pixel.green;
+    const blue = pixel.blue;
     const rawFormats = {
       rgbaAverage: Math.floor(
         (((red + green + blue) / 3) * (BRIGHTNESS_MAP.length - 1)) / 255
       ),
       lightness: Math.floor(
-        (((Math.max(pixel.red, green, blue) +
-          Math.min(pixel.red, green, blue)) /
-          2) *
+        (((Math.max(red, green, blue) + Math.min(red, green, blue)) / 2) *
           (BRIGHTNESS_MAP.length - 1)) /
           255
       ),
       luminosity: Math.floor(
-        ((0.21 * pixel.red + 0.72 * green + 0.07 * blue) *
+        ((0.21 * red + 0.72 * green + 0.07 * blue) *
           (BRIGHTNESS_MAP.length - 1)) /
           255
       ),
@@ -106,82 +104,16 @@ const picture = Caman('img/ascii-pineapple.jpg', function () {
     const red = pixel.red;
     const green = pixel.green;
     const blue = pixel.blue;
-    //Ported from:
-    //https://stackoverflow.com/questions/44189508/finding-which-color-is-the-closest-to-the-given-rgb-values-in-c/44463014
-
     const distinct = [
-      {
-        color: 'black',
-        value: {
-          red: 0,
-          green: 0,
-          blue: 0,
-        },
-      },
-      {
-        color: 'red',
-        value: {
-          red: 255,
-          green: 0,
-          blue: 0,
-        },
-      },
-      {
-        color: 'green',
-        value: {
-          red: 0,
-          green: 190,
-          blue: 0,
-        },
-      },
-      {
-        color: 'yellow',
-        value: {
-          red: 255,
-          green: 235,
-          blue: 0,
-        },
-      },
-      {
-        color: 'blue',
-        value: {
-          red: 67,
-          green: 133,
-          blue: 255,
-        },
-      },
-      {
-        color: 'magenta',
-        value: {
-          red: 255,
-          green: 0,
-          blue: 255,
-        },
-      },
-      {
-        color: 'cyan',
-        value: {
-          red: 100,
-          green: 255,
-          blue: 255,
-        },
-      },
-      {
-        color: 'white',
-        value: {
-          red: 255,
-          green: 255,
-          blue: 255,
-        },
-      },
-      {
-        color: 'grey',
-        value: {
-          red: 128,
-          green: 128,
-          blue: 128,
-        },
-      },
+      { color: 'black', value: { red: 0, green: 0, blue: 0 } },
+      { color: 'green', value: { red: 0, green: 190, blue: 0 } },
+      { color: 'red', value: { red: 255, green: 0, blue: 0 } },
+      { color: 'grey', value: { red: 128, green: 128, blue: 128 } },
+      { color: 'blue', value: { red: 67, green: 133, blue: 255 } },
+      { color: 'yellow', value: { red: 255, green: 235, blue: 0 } },
+      { color: 'magenta', value: { red: 255, green: 0, blue: 255 } },
+      { color: 'cyan', value: { red: 100, green: 255, blue: 255 } },
+      { color: 'white', value: { red: 255, green: 255, blue: 255 } },
     ];
 
     const closestColor = (r, g, b) => {
@@ -209,7 +141,7 @@ const picture = Caman('img/ascii-pineapple.jpg', function () {
     return closestColor(red, green, blue);
   };
 
-  const final = chunk(
+  const finalOutput = chunk(
     rawPixelDataToArrayOfRgbaObjects.map((pixel) =>
       colors[getColorFromRGBA(pixel)](getCharacterFromRGBA(pixel))
     ),
@@ -217,5 +149,5 @@ const picture = Caman('img/ascii-pineapple.jpg', function () {
   )
     .map((row) => row.join(''))
     .join('');
-  console.log(final);
+  console.log(finalOutput);
 });
